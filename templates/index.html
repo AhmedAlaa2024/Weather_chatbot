@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Chat bot</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: rgb(230 220 220);
+        }
+
+        div.container {
+            width: 500px;
+            height: 600px;
+            background-color: white;
+            margin: 30px auto;
+            border: 1 solid white;
+            border-radius: 20px;
+        }
+
+        header {
+            height: 70px;
+            background-color: #ffe6b6;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+        }
+
+        header div.color {
+            position: absolute;
+            background-color: wheat;
+            width: 100%;
+            height: 7px;
+            margin-top: 25px;
+            box-shadow: 0 10px 10px 7px wheat,
+                0 14px 14px 14px #ffe6b6,
+                0 -10px 10px 7px wheat,
+                0 -14px 14px 14px #ffe6b6;
+        }
+
+        header div.color {
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /*start chat area*/
+
+        div.chatarea::-webkit-scrollbar {
+            width: 5px;
+            background-color: #e8e8e8;
+            border-radius: 2.5px;
+        }
+
+        div.chatarea::-webkit-scrollbar-thumb {
+            background-color: gray;
+            border-radius: 2.5px;
+        }
+
+        div.chatarea {
+            overflow: auto;
+            height: 450px;
+            font-size: 15px;
+        }
+
+        div.chatarea div.mychat {
+            max-width: 75%;
+            margin: 7px;
+            padding: 7px;
+            background-color: #e8e8e8;
+            border-radius: 10px;
+            float: right;
+        }
+
+        div.chatarea div.clearfix {
+            clear: both;
+        }
+
+        div.chatarea div.botchat {
+            max-width: 75%;
+            margin: 7px;
+            padding: 7px;
+            background-color: lightgray;
+            border-radius: 10px;
+            float: left;
+        }
+
+        /*end chat area*/
+        footer {
+            height: 60px;
+            border: 1px solid rgb(184, 177, 177);
+            border-radius: 0 0 20px 20px;
+            padding: 10px;
+        }
+
+        footer div.myinput {
+            height: 35px;
+            padding: 5px;
+            border: 1px solid rgb(184, 177, 177);
+            border-radius: 20px;
+        }
+
+        footer div.myinput input.myinputtext {
+            width: 410px;
+            height: 27px;
+            border: none;
+            margin: 0 7px;
+        }
+
+        footer div.myinput button#submit img {
+            width: 20px;
+            height: 20px;
+        }
+
+        footer div.myinput button#submit {
+            width: 30px;
+            height: 30px;
+            padding: 5px;
+            background-color: wheat;
+            border: none;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="color">
+                <p>Chatbot</p>
+            </div>
+        </header>
+        <div class="chatarea">
+
+        </div>
+        <footer>
+            <div class="myinput">
+                <form id="form">
+                    <input class="myinputtext" type="text" id="city_name" name="city_name"
+                        placeholder="Write something..." />
+                    <button id="submit" type="submit"><img src="/static/paper-plane-regular.svg" alt="Submit" /></button>
+                </form>
+            </div>
+        </footer>
+    </div>
+    <script>
+        var myInput = document.querySelector('input.myinputtext'),
+            send = document.getElementById('submit'),
+            mychatarea = document.querySelector('div.chatarea');
+
+        document.getElementById('form').onsubmit = function (e) {
+            e.preventDefault();
+
+            fetch('/check', {
+                method: 'POST',
+                body: JSON.stringify({
+                    'city_name': document.getElementById('city_name').value
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+                .then(function (response) {
+                    return response.json();
+                })
+
+                .then(function (jsonRequest) {
+                    console.log(jsonRequest);
+
+                    var mychat = document.createElement('div'),
+                        botchat = document.createElement('div'),
+                        clearfix1 = document.createElement('div'),
+                        clearfix2 = document.createElement('div');
+                    //b7ot el value bta3ty strat
+
+                    var mychattext = document.createTextNode(myInput.value);
+                    mychat.className = 'mychat';
+                    mychat.appendChild(mychattext);
+                    mychatarea.appendChild(mychat);
+                    myInput.value = '';
+                    myInput.focus();
+
+                    //b7ot el value bta3ty end
+
+                    //b3ml fix ll float strat
+
+                    clearfix1.className = 'clearfix';
+                    mychatarea.appendChild(clearfix1);
+
+                    //b3ml fix ll float end
+
+                    // el bot y7ot el value bta3to start
+
+                    //kml enta fe el 7tta de strat 
+
+                    var whiteSpace = document.createElement('div'),
+                        botimage = document.createElement('img'),
+                        pdiv = document.createElement('div'),
+                        botCity = document.createElement('p'),
+                        botTemp = document.createElement('p'),
+                        botStatus = document.createElement('p');
+
+                    whiteSpace.style.backgroundColor = 'white';
+                    whiteSpace.style.padding = '13px';
+                    botimage.style.marginRight = '5px';
+                    botimage.style.width = '50px';
+                    botimage.style.height = '50px';
+                    pdiv.style.display = 'inline-block';
+                    botCity.style.fontSize = '24px';
+                    botCity.style.fontWeight = 'bold';
+                    botTemp.style.fontSize = '20px';
+                    botStatus.style.fontSize = '20px';
+                    //start
+
+                    botimage.src = jsonRequest['icon'];
+                    botCity.appendChild(document.createTextNode(jsonRequest['city']));
+                    botTemp.appendChild(document.createTextNode(jsonRequest['temperature']));
+                    botStatus.appendChild(document.createTextNode(jsonRequest['description']));
+
+                    //end
+                    botchat.appendChild(whiteSpace);
+                    whiteSpace.appendChild(botimage);
+                    whiteSpace.appendChild(pdiv);
+                    pdiv.appendChild(botCity);
+                    pdiv.appendChild(botTemp);
+                    pdiv.appendChild(botStatus);
+
+                    //kml enta fe el 7tta de end
+
+                    botchat.className = 'botchat';
+                    mychatarea.appendChild(botchat);
+
+                    //el bot y7ot el value bta3to end
+
+                    //b3ml fix ll float strat
+
+                    clearfix2.className = 'clearfix';
+                    mychatarea.appendChild(clearfix2);
+                })
+        }
+    </script>
+</body>
+
+</html>
