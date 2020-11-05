@@ -9,5 +9,5 @@ This Project is created to practice on using APIs. The project is a chatbot who 
 
 ## Project's Developer:
 1. Ahmed Alaa (Backend Developer)
-2. Hesham Ashraf (Frontend Developer)
+2. Hesham Ashraf (UI Designer)
 
